@@ -1,0 +1,7 @@
+import Link from 'next/link';
+import {notFound} from 'next/navigation';
+import {Phone} from 'lucide-react';
+import {services} from '../data';
+export function generateStaticParams(){return Object.keys(services).map(slug=>({slug}))}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const s=services[slug as keyof typeof services];if(!s)return {};return {title:s.title,description:s.intro,alternates:{canonical:`/services/${slug}/`}}}
+export default async function Page({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const s=services[slug as keyof typeof services];if(!s)notFound();return <><section className="innerhero"><div className="breadcrumb"><Link href="/">หน้าแรก</Link> / <Link href="/services/">บริการของเรา</Link></div><p className="eyebrow">FASTCAR BATTERY · 24 HOURS</p><h1>{s.title}</h1><p>{s.intro}</p></section><article className="article"><h2>{s.heading}</h2><p>{s.body}</p><h2>เตรียมข้อมูลก่อนเรียกบริการ</h2><ul>{s.items.map(i=><li key={i}>{i}</li>)}</ul><h2>ติดต่อบริการในโคราช</h2><p>โทรสอบถามบริการได้ตลอด 24 ชั่วโมง กรุณาตรวจสอบพื้นที่ ค่าใช้จ่าย และเวลาที่ช่างสามารถเข้าถึงก่อนนัดหมาย</p><a className="button" href="tel:0945397897"><Phone size={18}/> โทร 094-539-7897</a><p style={{marginTop:16}}>สายด่วนอีกเบอร์ <a href="tel:0979466191">097-946-6191</a></p><Link href="/location/">ดูที่ตั้งร้านและข้อมูลติดต่อ →</Link></article></>}
